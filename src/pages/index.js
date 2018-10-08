@@ -19,11 +19,12 @@ class Group extends React.Component {
           onClick={() => {
             this.setState({ open: !this.state.open })
           }}
+          style={{ cursor: 'pointer' }}
         >
           {group.fieldValue} <small>({group.totalCount})</small>
         </h2>
         {this.state.open &&
-          group.edges.map(e => (
+          group.edges.slice(0, 40).map(e => (
             <Link
               to={e.node.mongodb_id}
               style={{ marginRight: '1rem' }}
