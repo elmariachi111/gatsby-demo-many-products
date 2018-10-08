@@ -1,15 +1,66 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import { Link, graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 
-const IndexPage = () => (
+class Group extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      open: false,
+    }
+  }
+
+  render() {
+    const group = this.props.group
+    return (
+      <div>
+        <h2
+          onClick={() => {
+            this.setState({ open: !this.state.open })
+          }}
+        >
+          {group.fieldValue} <small>({group.totalCount})</small>
+        </h2>
+        {this.state.open &&
+          group.edges.map(e => (
+            <Link
+              to={e.node.mongodb_id}
+              style={{ marginRight: '1rem' }}
+              key={`p-${e.node.mongodb_id}`}
+            >
+              {e.node.name}
+            </Link>
+          ))}
+      </div>
+    )
+  }
+}
+
+const IndexPage = ({ data }) => (
   <Layout>
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <Link to="/page-2/">Go to page 2</Link>
+    <h1>All the products</h1>
+    {data.grouped.group.map(g => (
+      <Group key={`g-${g.fieldValue}`} group={g} />
+    ))}
   </Layout>
 )
+
+export const query = graphql`
+  {
+    grouped: allMongodbFakerProducts {
+      group(field: type) {
+        fieldValue
+        totalCount
+        edges {
+          node {
+            mongodb_id
+            name
+          }
+        }
+      }
+    }
+  }
+`
 
 export default IndexPage

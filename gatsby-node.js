@@ -12,7 +12,7 @@ exports.createPages = ({ graphql, actions }) => {
   return new Promise((resolve, reject) => {
     graphql(`
       {
-        allMongodbFakerProducts(limit: 10) {
+        allMongodbFakerProducts {
           edges {
             node {
               mongodb_id
