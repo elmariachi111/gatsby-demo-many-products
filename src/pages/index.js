@@ -3,42 +3,18 @@ import { Link, graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 
-class Group extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      open: false,
-    }
-  }
+const Group = ({ group }) => (
+  <div>
+    <h2>
+      <Link to={`/category/${group.fieldValue}`}>
+        {group.fieldValue}
+      </Link>
+      <small>({group.totalCount})</small>
+    </h2>
+  </div>
+)
 
-  render() {
-    const group = this.props.group
-    return (
-      <div>
-        <h2
-          onClick={() => {
-            this.setState({ open: !this.state.open })
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          {group.fieldValue} <small>({group.totalCount})</small>
-        </h2>
-        {this.state.open &&
-          group.edges.slice(0, 40).map(e => (
-            <Link
-              to={e.node.mongodb_id}
-              style={{ marginRight: '1rem' }}
-              key={`p-${e.node.mongodb_id}`}
-            >
-              {e.node.name}
-            </Link>
-          ))}
-      </div>
-    )
-  }
-}
-
-const IndexPage = ({ data }) => (
+export default ({ data }) => (
   <Layout>
     <h1>Categories</h1>
     {data.grouped.group.map(g => (
@@ -53,15 +29,7 @@ export const query = graphql`
       group(field: type) {
         fieldValue
         totalCount
-        edges {
-          node {
-            mongodb_id
-            name
-          }
-        }
       }
     }
   }
 `
-
-export default IndexPage
