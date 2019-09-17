@@ -40,7 +40,7 @@ class Group extends React.Component {
 
 const IndexPage = ({ data }) => (
   <Layout>
-    <h1>All the products</h1>
+    <h1>Categories</h1>
     {data.grouped.group.map(g => (
       <Group key={`g-${g.fieldValue}`} group={g} />
     ))}
